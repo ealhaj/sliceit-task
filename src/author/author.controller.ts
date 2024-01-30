@@ -1,23 +1,15 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { LocalAuthGuard } from 'auth/auth.guard';
-import { Repository } from 'typeorm';
-import { Author } from './author.entity';
-import { Quote } from './quote.entity';
+import { AuthorService } from './author.service';
 
 @UseGuards(LocalAuthGuard)
 @Controller()
 export class AuthorController {
-  constructor(
-    @InjectRepository(Author) private authorRepository: Repository<Author>,
-    @InjectRepository(Quote) private quoteRepository: Repository<Quote>,
-  ) {}
+  constructor(private readonly authorService: AuthorService) {}
 
   @Get('author')
   async author() {
-    const author = await this.authorRepository.findOne({
-      where: { id: Math.ceil(Math.random() * 3) },
-    });
+    const author = await this.authorService.findOne();
 
     return {
       success: true,
@@ -30,16 +22,16 @@ export class AuthorController {
 
   @Get('quote')
   async quote(@Query('authorId') authorId: number) {
-    const quotes = await this.quoteRepository.find({
-      where: { author: { id: authorId } },
-    });
+    const quotes = await this.authorService.findQuotes(authorId);
+
+    const quoteIndex = Math.floor(Math.random() * quotes.length);
 
     return {
       success: true,
       data: {
         authorId,
-        quoteId: quotes[0].id,
-        quote: quotes[0].quote,
+        quoteId: quotes[quoteIndex].id,
+        quote: quotes[quoteIndex].quote,
       },
     };
   }
