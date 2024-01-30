@@ -10,7 +10,7 @@ export class AuthorService {
     @InjectRepository(Quote) private quoteRepository: Repository<Quote>,
   ) {}
 
-  async findOne(): Promise<Author> {
+  async findRandomAuthor(): Promise<Author> {
     const author = await this.authorRepository.findOneOrFail({
       where: { id: Math.ceil(Math.random() * 3) },
     });

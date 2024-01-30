@@ -9,7 +9,7 @@ export class AuthorController {
 
   @Get('author')
   async author() {
-    const author = await this.authorService.findOne();
+    const author = await this.authorService.findRandomAuthorOrFail();
 
     return {
       success: true,
