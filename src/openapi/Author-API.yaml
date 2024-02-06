@@ -68,6 +68,8 @@ paths:
                     $ref: '#/components/schemas/UserView'
                     x-stoplight:
                       id: rbeje88vhoktt
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
       operationId: get-profile
       x-stoplight:
         id: dqzivzpa42bjv
@@ -100,6 +102,10 @@ paths:
                     $ref: '#/components/schemas/Author'
                     x-stoplight:
                       id: nyfp1wdgh4t4b
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
       operationId: get-author
       x-stoplight:
         id: f18mw6lassqfr
@@ -127,6 +133,10 @@ paths:
                     $ref: '#/components/schemas/Quote'
                     x-stoplight:
                       id: 4vb79mvx3p0y5
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
       operationId: get-quote
       x-stoplight:
         id: kr9ql83stqwkm
@@ -174,6 +184,89 @@ paths:
       description: 'Public endpoint without authentication, returning general info.'
       tags:
         - App
+  /login:
+    post:
+      summary: Login User
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: 2gf0i20webnxf
+                  data:
+                    type: object
+                    x-stoplight:
+                      id: 2r55pmuylep39
+                    required:
+                      - token
+                    additionalProperties: false
+                    properties:
+                      token:
+                        type: string
+                        x-stoplight:
+                          id: 3zh6dfm7k47e1
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+      operationId: post-login
+      x-stoplight:
+        id: wb2kpvcmlo9jp
+      description: Authenticate user credentials and return session token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  x-stoplight:
+                    id: nvuwqb9cw0cif
+                password:
+                  type: string
+                  x-stoplight:
+                    id: ipkvw9g3v3hzm
+  /logout:
+    delete:
+      summary: Your DELETE endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: i7w9qxu5lx40l
+                  data:
+                    type: object
+                    x-stoplight:
+                      id: do58e2zgd01w5
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+      operationId: delete-logout
+      x-stoplight:
+        id: wayi02ly4odux
+      parameters:
+        - $ref: '#/components/parameters/token'
 components:
   schemas:
     UserCreate:
@@ -257,3 +350,28 @@ components:
       schema:
         type: string
       description: session token to authorize the request
+  responses:
+    ErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - message
+              - statusCode
+            properties:
+              message:
+                type: string
+                x-stoplight:
+                  id: v6525jowuwrkb
+              statusCode:
+                type: integer
+                x-stoplight:
+                  id: 4bk4dnb8j76zt
+                example: 404
+              error:
+                type: string
+                x-stoplight:
+                  id: fvzyzu8grq9zr
