@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Session,
   UseGuards,
@@ -12,7 +13,7 @@ import { LocalAuthGuard } from 'auth/auth.guard';
 import { UsersService } from './users.service';
 import { TUser } from './users.types';
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
@@ -28,8 +29,12 @@ export class UsersController {
   }
 
   @UseGuards(LocalAuthGuard)
-  @Get('profile')
-  async show(@Session() session: Record<string, any>) {
+  @Get(':uuid')
+  async show(
+    @Param('uuid') uuid: string,
+    @Session() session: Record<string, any>,
+  ) {
+    console.log(uuid); // To be implemented in the new feature branch
     const info = await this.usersService.findOneById(session.userId);
 
     return {

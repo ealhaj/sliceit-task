@@ -1,13 +1,19 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { LocalAuthGuard } from 'auth/auth.guard';
 import { AuthorService } from './author.service';
 
 @UseGuards(LocalAuthGuard)
-@Controller()
+@Controller('authors')
 export class AuthorController {
   constructor(private readonly authorService: AuthorService) {}
 
-  @Get('author')
+  @Get()
   async author() {
     const author = await this.authorService.findRandomAuthorOrFail();
 
@@ -20,8 +26,8 @@ export class AuthorController {
     };
   }
 
-  @Get('quote')
-  async quote(@Query('authorId') authorId: number) {
+  @Get(':id/quote')
+  async quote(@Param('id', ParseIntPipe) authorId: number) {
     const quotes = await this.authorService.findQuotes(authorId);
 
     const quoteIndex = Math.floor(Math.random() * quotes.length);
