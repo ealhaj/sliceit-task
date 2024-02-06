@@ -11,9 +11,13 @@ export class AuthorService {
   ) {}
 
   async findRandomAuthorOrFail(): Promise<Author> {
-    const author = await this.authorRepository.findOneOrFail({
+    const author = await this.authorRepository.findOne({
       where: { id: Math.ceil(Math.random() * 3) },
     });
+
+    if (!author) {
+      throw new NotFoundException();
+    }
 
     return author;
   }
