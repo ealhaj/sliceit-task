@@ -1,0 +1,377 @@
+openapi: 3.1.0
+x-stoplight:
+  id: w5mp4v43aryag
+info:
+  title: Author API
+  version: '1.0'
+  summary: Author & Quote API
+  contact:
+    name: Ebrahim
+    url: ''
+    email: ebrahim@codemina.co.uk
+  termsOfService: ''
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /register:
+    post:
+      summary: Register New User
+      tags:
+        - User
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: smmf2oarkyu5z
+                  data:
+                    type: object
+                    x-stoplight:
+                      id: lt01h2impxb2z
+      operationId: post-register
+      x-stoplight:
+        id: jnlgjgcrpdc1j
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+      description: This endpoint accessible without authentication to register new system user.
+  /profile:
+    get:
+      summary: Get My Profile
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: bf3fe40htsdfy
+                  data:
+                    $ref: '#/components/schemas/UserView'
+                    x-stoplight:
+                      id: rbeje88vhoktt
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+      operationId: get-profile
+      x-stoplight:
+        id: dqzivzpa42bjv
+      parameters:
+        - $ref: '#/components/parameters/token'
+      description: Getting user fullname and email using the session token.
+      requestBody:
+        content: {}
+  /author:
+    get:
+      summary: Get Author Info
+      tags:
+        - Author
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: ootcjxupv2edc
+                  data:
+                    $ref: '#/components/schemas/Author'
+                    x-stoplight:
+                      id: nyfp1wdgh4t4b
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+      operationId: get-author
+      x-stoplight:
+        id: f18mw6lassqfr
+      parameters:
+        - $ref: '#/components/parameters/token'
+      description: Fetching random author id and name.
+  /quote:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Author
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: 0urpk0k2l2u3b
+                  data:
+                    $ref: '#/components/schemas/Quote'
+                    x-stoplight:
+                      id: 4vb79mvx3p0y5
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+        '404':
+          $ref: '#/components/responses/ErrorResponse'
+      operationId: get-quote
+      x-stoplight:
+        id: kr9ql83stqwkm
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: authorId
+          required: true
+          description: Author ID to get random quote
+        - $ref: '#/components/parameters/token'
+  /info:
+    get:
+      summary: Company Info
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: qs20as2xs0yrh
+                  data:
+                    type: object
+                    x-stoplight:
+                      id: kkrlf1p4mepfb
+                    additionalProperties: false
+                    required:
+                      - info
+                    properties:
+                      info:
+                        type: string
+                        x-stoplight:
+                          id: ivc9fvqb176j6
+      operationId: get-info
+      x-stoplight:
+        id: acmc0z1rfao9w
+      description: 'Public endpoint without authentication, returning general info.'
+      tags:
+        - App
+  /login:
+    post:
+      summary: Login User
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: 2gf0i20webnxf
+                  data:
+                    type: object
+                    x-stoplight:
+                      id: 2r55pmuylep39
+                    required:
+                      - token
+                    additionalProperties: false
+                    properties:
+                      token:
+                        type: string
+                        x-stoplight:
+                          id: 3zh6dfm7k47e1
+        '401':
+          $ref: '#/components/responses/ErrorResponse'
+      operationId: post-login
+      x-stoplight:
+        id: wb2kpvcmlo9jp
+      description: Authenticate user credentials and return session token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  x-stoplight:
+                    id: nvuwqb9cw0cif
+                password:
+                  type: string
+                  x-stoplight:
+                    id: ipkvw9g3v3hzm
+  /logout:
+    delete:
+      summary: Your DELETE endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    x-stoplight:
+                      id: i7w9qxu5lx40l
+                  data:
+                    type: object
+                    x-stoplight:
+                      id: do58e2zgd01w5
+        '403':
+          $ref: '#/components/responses/ErrorResponse'
+      operationId: delete-logout
+      x-stoplight:
+        id: wayi02ly4odux
+      parameters:
+        - $ref: '#/components/parameters/token'
+components:
+  schemas:
+    UserCreate:
+      title: UserCreate
+      x-stoplight:
+        id: cdwbhb5yymek1
+      type: object
+      additionalProperties: false
+      required:
+        - fullname
+        - email
+        - password
+      properties:
+        fullname:
+          type: string
+          x-stoplight:
+            id: 9kuvnkf6lmzfn
+        email:
+          type: string
+          x-stoplight:
+            id: 9kc4xgidwhk8c
+        password:
+          type: string
+          x-stoplight:
+            id: gvessppcwhh2i
+    User:
+      title: User
+      x-stoplight:
+        id: byu6tqge53vnj
+      type: object
+      additionalProperties: false
+      required:
+        - fullname
+        - email
+      properties:
+        fullname:
+          type: string
+          x-stoplight:
+            id: pwg3ufvwrtt9x
+        email:
+          type: string
+          x-stoplight:
+            id: dh5g8dja9gaos
+    Author:
+      title: Author
+      x-stoplight:
+        id: wxj60buhuzhnr
+      type: object
+      properties:
+        authorId:
+          type: integer
+          x-stoplight:
+            id: g42jfinl200t6
+        name:
+          type: string
+          x-stoplight:
+            id: ojc0sts0gcqy0
+    Quote:
+      title: Quote
+      x-stoplight:
+        id: 473a0rebi5ide
+      type: object
+      properties:
+        authorId:
+          type: integer
+          x-stoplight:
+            id: fk3swelc2y4it
+        quoteId:
+          type: integer
+          x-stoplight:
+            id: zzcaukfhnc6os
+        quote:
+          type: string
+          x-stoplight:
+            id: 1f1rn34didat6
+  parameters:
+    token:
+      name: token
+      in: query
+      required: true
+      schema:
+        type: string
+      description: session token to authorize the request
+  responses:
+    ErrorResponse:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required:
+              - message
+              - statusCode
+            properties:
+              message:
+                type: string
+                x-stoplight:
+                  id: v6525jowuwrkb
+              statusCode:
+                type: integer
+                x-stoplight:
+                  id: 4bk4dnb8j76zt
+                example: 404
+              error:
+                type: string
+                x-stoplight:
+                  id: fvzyzu8grq9zr
